@@ -18,13 +18,51 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   
   const cryUrl = pokemon.cries?.latest || '';
 
+  const typeTranslations: Record<string, string> = {
+    normal: 'normal', fighting: 'lucha', flying: 'volador',
+    poison: 'veneno', ground: 'tierra', rock: 'roca',
+    bug: 'bicho', ghost: 'fantasma', steel: 'acero',
+    fire: 'fuego', water: 'agua', grass: 'planta',
+    electric: 'eléctrico', psychic: 'psíquico', ice: 'hielo',
+    dragon: 'dragón', dark: 'siniestro', fairy: 'hada'
+  };
+
+  const speakDescription = () => {
+    if (!('speechSynthesis' in window)) return;
+    
+    // Cancelar cualquier audio de voz previo
+    window.speechSynthesis.cancel();
+    
+    const translatedTypes = pokemon.types.map(t => typeTranslations[t.type.name] || t.type.name).join(' y ');
+    const text = `${pokemon.name}. Pokémon de tipo ${translatedTypes}.`;
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-ES';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    
+    // Configurar el final de la reproducción general
+    utterance.onend = () => setIsPlaying(false);
+    
+    window.speechSynthesis.speak(utterance);
+  };
+
   const handlePlayAudio = () => {
-    if (cryUrl && !isPlaying) {
+    if (isPlaying) return;
+    
+    setIsPlaying(true);
+    
+    if (cryUrl) {
       const audio = new Audio(cryUrl);
       audio.volume = 0.3;
-      setIsPlaying(true);
       audio.play();
-      audio.onended = () => setIsPlaying(false);
+      audio.onended = () => {
+        // Después del grito, hablar la descripción
+        speakDescription();
+      };
+    } else {
+      // Si no hay grito, hablar directamente
+      speakDescription();
     }
   };
 

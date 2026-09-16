@@ -1,5 +1,5 @@
 import React from 'react';
-import { RequestState } from '../types/pokemon';
+import type { RequestState } from '../types/pokemon';
 
 interface RequestStatusProps {
   state: RequestState;

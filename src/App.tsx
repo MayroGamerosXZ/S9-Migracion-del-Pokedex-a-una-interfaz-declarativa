@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { SearchForm } from './components/SearchForm';
 import { RequestStatus } from './components/RequestStatus';
 import { PokemonList } from './components/PokemonList';
 import { fetchPokemonList, fetchPokemonDetails } from './services/pokeApi';
-import { Pokemon, RequestState } from './types/pokemon';
+import type { Pokemon, RequestState } from './types/pokemon';
 
 const LIMIT = 20;
 

@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guión de Presentación — Pokédex React</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #21262d;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #f78166;
+      --green: #3fb950;
+      --purple: #d2a8ff;
+      --yellow: #e3b341;
+      --text: #c9d1d9;
+      --text-dim: #8b949e;
+      --code-bg: #0d1117;
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.7;
+    }
+
+    /* ── NAV LATERAL ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: 260px; height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 24px 0;
+      z-index: 100;
+    }
+    nav .nav-title {
+      padding: 0 20px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+    }
+    nav ul { list-style: none; padding: 12px 0; }
+    nav ul li a {
+      display: block;
+      padding: 7px 20px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13.5px;
+      border-left: 3px solid transparent;
+      transition: all .2s;
+    }
+    nav ul li a:hover, nav ul li a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: rgba(88,166,255,.06);
+    }
+    nav ul li a .num {
+      display: inline-block;
+      width: 20px;
+      font-size: 11px;
+      color: var(--text-dim);
+      opacity: .6;
+    }
+
+    /* ── MAIN ── */
+    main {
+      margin-left: 260px;
+      padding: 48px 56px;
+      max-width: 960px;
+    }
+
+    /* ── ENCABEZADO PRINCIPAL ── */
+    .hero {
+      text-align: center;
+      padding: 56px 0 48px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+    }
+    .hero .badge {
+      display: inline-block;
+      background: linear-gradient(135deg,#1f6feb,#388bfd);
+      color: #fff;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: 40px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      color: var(--text-dim);
+      font-size: 16px;
+      max-width: 540px;
+      margin: 0 auto 24px;
+    }
+    .meta-grid {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 32px;
+      text-align: left;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 24px;
+    }
+    .meta-grid .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; }
+    .meta-grid .value { font-size: 13px; font-weight: 600; color: var(--text); }
+
+    /* ── SECCIONES ── */
+    section { margin-bottom: 64px; }
+    section h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    section h2 .section-num {
+      background: var(--accent);
+      color: #000;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    section .divider {
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+      border-radius: 2px;
+      margin-bottom: 24px;
+    }
+
+    /* ── BLOQUE GUIÓN ── */
+    .script-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .script-block::before {
+      content: '🎤 GUIÓN';
+      position: absolute;
+      top: -11px; left: 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--yellow);
+    }
+    .script-block p {
+      margin-top: 8px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text);
+    }
+    .script-block em {
+      color: var(--accent);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* ── BLOQUE CÓDIGO ── */
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 16px 0;
+      overflow: hidden;
+    }
+    .code-block .code-header {
+      background: var(--surface2);
+      padding: 8px 16px;
+      font-size: 12px;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-block .code-header .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .code-block .code-header .dot.r { background: #f78166; }
+    .code-block .code-header .dot.y { background: #e3b341; }
+    .code-block .code-header .dot.g { background: #3fb950; }
+    .code-block pre {
+      padding: 20px;
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      color: var(--text);
+    }
+    .code-block pre .kw  { color: #ff7b72; }  /* keyword */
+    .code-block pre .fn  { color: #d2a8ff; }  /* function */
+    .code-block pre .str { color: #a5d6ff; }  /* string */
+    .code-block pre .cmt { color: #8b949e; font-style: italic; }
+    .code-block pre .tp  { color: #3fb950; }  /* type */
+    .code-block pre .num { color: #f2cc60; }  /* number */
+    .code-block pre .var { color: #79c0ff; }  /* variable */
+
+    /* ── CHIPS DE ARCHIVOS ── */
+    .file-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-family: monospace;
+      color: var(--purple);
+      margin: 4px 4px 4px 0;
+    }
+
+    /* ── CALLOUTS ── */
+    .callout {
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-left: 4px solid;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .callout.info  { background: rgba(88,166,255,.08);  border-color: var(--accent);  color: #a0c4ff; }
+    .callout.tip   { background: rgba(63,185,80,.08);   border-color: var(--green);   color: #7ee787; }
+    .callout.warn  { background: rgba(227,179,65,.08);  border-color: var(--yellow);  color: #e3b341; }
+    .callout.demo  { background: rgba(247,129,102,.08); border-color: var(--accent2); color: #ffa98a; }
+    .callout strong { font-weight: 700; }
+
+    /* ── TABLA DE REQUERIMIENTOS ── */
+    .req-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 16px 0;
+    }
+    .req-table th {
+      background: var(--surface2);
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+    }
+    .req-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .req-table tr:last-child td { border-bottom: none; }
+    .badge-ok  { background: rgba(63,185,80,.15);   color: var(--green);  border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
+    .badge-file{ background: rgba(210,168,255,.12); color: var(--purple); border-radius: 4px; padding: 2px 8px; font-size: 11px; font-family: monospace; }
+
+    /* ── PRUEBAS ── */
+    .test-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .test-step .step-num {
+      background: var(--accent2);
+      color: #000;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .test-step .step-body strong { color: var(--text); display: block; margin-bottom: 4px; }
+    .test-step .step-body p { color: var(--text-dim); font-size: 14px; margin: 0; }
+    .test-step .step-body .expected { color: var(--green); font-size: 13px; margin-top: 6px; font-style: italic; }
+
+    /* ── DIAGRAMA ── */
+    .diagram {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 2.2;
+      color: var(--text-dim);
+      overflow-x: auto;
+    }
+    .diagram .box {
+      display: inline-block;
+      background: var(--surface2);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 4px 14px;
+      font-weight: 700;
+    }
+    .diagram .box.srv  { border-color: var(--green);  color: var(--green); }
+    .diagram .box.type { border-color: var(--purple); color: var(--purple); }
+    .diagram .box.ui   { border-color: var(--yellow); color: var(--yellow); }
+    .diagram .arrow { color: var(--text-dim); margin: 0 6px; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 56px;
+      color: var(--text-dim);
+      font-size: 12px;
+      margin-left: 260px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ NAV LATERAL ═══════════════════════════ -->
+<nav>
+  <div class="nav-title">📋 Índice del Guión</div>
+  <ul>
+    <li><a href="#intro"><span class="num">00</span> Introducción</a></li>
+    <li><a href="#arquitectura"><span class="num">01</span> Arquitectura del Proyecto</a></li>
+    <li><a href="#tipos"><span class="num">02</span> Tipos TypeScript</a></li>
+    <li><a href="#servicio"><span class="num">03</span> Servicio PokéAPI</a></li>
+    <li><a href="#search"><span class="num">04</span> SearchForm</a></li>
+    <li><a href="#status"><span class="num">05</span> RequestStatus</a></li>
+    <li><a href="#list-card"><span class="num">06</span> PokemonList & Card</a></li>
+    <li><a href="#app"><span class="num">07</span> App.tsx (Orquestador)</a></li>
+    <li><a href="#flujo"><span class="num">08</span> Flujo Completo</a></li>
+    <li><a href="#pruebas"><span class="num">09</span> Pruebas Finales</a></li>
+    <li><a href="#requisitos"><span class="num">10</span> Verificación Rúbrica</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════ MAIN ══════════════════════════════════ -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">S9 · React + TypeScript + Vite</div>
+    <h1>Pokédex<br/>Interfaz Declarativa</h1>
+    <p>Guión de presentación paso a paso: comprende cada archivo, su función y el flujo completo de la aplicación.</p>
+    <div class="meta-grid">
+      <span class="label">Alumno</span>   <span class="value">Mayro Gameros</span>
+      <span class="label">Proyecto</span> <span class="value">Migración Pokédex → React</span>
+      <span class="label">Stack</span>    <span class="value">React 18 · TS · Vite 8</span>
+      <span class="label">API</span>      <span class="value">pokeapi.co/api/v2</span>
+    </div>
+  </div>
+
+  <!-- ══════════ 00 · INTRODUCCIÓN ══════════ -->
+  <section id="intro">
+    <h2><span class="section-num">0</span> Introducción — ¿De dónde venimos?</h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "Antes de ver el código nuevo, es importante entender el punto de partida.
+        La Pokédex original estaba escrita en <em>Vanilla JavaScript</em> y constaba de tres archivos:
+        <code>pokemon.html</code>, <code>pokemon.css</code> y <code>pokemon.js</code>.
+        Toda la lógica vivía en un solo archivo de 193 líneas, usando <em>document.createElement</em>
+        e <em>innerHTML</em> para pintar las tarjetas manualmente en el DOM. Funciona,
+        pero es difícil de mantener, probar y escalar.
+        El objetivo de esta sesión es ver cómo migramos eso a una arquitectura moderna con
+        <em>React y TypeScript</em>, donde la interfaz se describe en vez de ser construida pieza a pieza."
+      </p>
+    </div>
+
+    <div class="callout info">
+      <strong>Concepto clave:</strong> "Imperativo" (dile al navegador <em>cómo</em> hacerlo)
+      vs. <strong>Declarativo</strong> (dile al navegador <em>qué</em> mostrar y React se encarga del resto).
+    </div>
+  </section>
+
+  <!-- ══════════ 01 · ARQUITECTURA ══════════ -->
+  <section id="arquitectura">
+    <h2><span class="section-num">1</span> Arquitectura del Proyecto</h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "La primera decisión fue crear el proyecto con <em>Vite</em>, que es una herramienta de
+        construcción moderna. El comando <em>npm create vite@latest pokedex-react -- --template react-ts</em>
+        nos generó la base. Luego organizamos el código en carpetas con responsabilidades claras
+        siguiendo el principio de separación de capas."
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        Estructura de carpetas · D:\pokedex-react\src\
+      </div>
+      <pre>
+src/
+├── <span class="tp">types/</span>
+│   └── pokemon.ts         <span class="cmt">← Contratos de datos (interfaces)</span>
+│
+├── <span class="fn">services/</span>
+│   └── pokeApi.ts         <span class="cmt">← Capa de acceso a la API (fetch)</span>
+│
+├── <span class="var">components/</span>
+│   ├── SearchForm.tsx     <span class="cmt">← Formulario controlado + debounce</span>
+│   ├── RequestStatus.tsx  <span class="cmt">← Guarda de estados de la UI</span>
+│   ├── PokemonList.tsx    <span class="cmt">← Iterador de tarjetas</span>
+│   └── PokemonCard.tsx    <span class="cmt">← Tarjeta individual</span>
+│
+├── App.tsx                <span class="cmt">← Orquestador principal (estado global)</span>
+├── main.tsx               <span class="cmt">← Punto de entrada (monta React en el DOM)</span>
+└── index.css              <span class="cmt">← Estilos globales + colores por tipo</span></pre>
+    </div>
+
+    <div class="callout tip">
+      <strong>¿Por qué separar así?</strong> Si mañana la PokéAPI cambia su URL, solo tocamos
+      <code>pokeApi.ts</code>. Si queremos cambiar la tarjeta, solo tocamos <code>PokemonCard.tsx</code>.
+      Nadie afecta a nadie.
+    </div>
+  </section>
+
+  <!-- ══════════ 02 · TIPOS ══════════ -->
+  <section id="tipos">
+    <h2><span class="section-num">2</span> Tipos TypeScript · <code>src/types/pokemon.ts</code></h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "TypeScript nos exige definir la <em>forma</em> de los datos antes de usarlos.
+        Este archivo es el contrato de toda la aplicación. Si la API nos manda un campo que no esperamos,
+        TypeScript nos avisa antes de que lleguemos al navegador. Aquí definimos tres categorías:
+        los datos del Pokémon, las respuestas de la lista paginada, y los posibles estados de la UI."
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        src/types/pokemon.ts — fragmento clave
+      </div>
+      <pre>
+<span class="cmt">// 1. Describe cómo llegan los tipos del Pokémon desde la API</span>
+<span class="kw">export interface</span> <span class="tp">PokemonType</span> {
+  slot: <span class="tp">number</span>;
+  type: { name: <span class="tp">string</span>; url: <span class="tp">string</span>; };
+}
+
+<span class="cmt">// 2. Describe el objeto completo de un Pokémon</span>
+<span class="kw">export interface</span> <span class="tp">Pokemon</span> {
+  id:      <span class="tp">number</span>;
+  name:    <span class="tp">string</span>;
+  weight:  <span class="tp">number</span>;
+  types:   <span class="tp">PokemonType[]</span>;
+  stats:   <span class="tp">PokemonStat[]</span>;
+  sprites: <span class="tp">PokemonSprites</span>;
+  cries?:  <span class="tp">PokemonCries</span>;  <span class="cmt">// el ? indica que puede no existir</span>
+}
+
+<span class="cmt">// 3. Los cinco estados posibles de la UI (unión de literales)</span>
+<span class="kw">export type</span> <span class="tp">RequestState</span> =
+  <span class="str">'idle'</span> | <span class="str">'loading'</span> | <span class="str">'success'</span> | <span class="str">'empty'</span> | <span class="str">'error'</span>;</pre>
+    </div>
+
+    <div class="callout info">
+      <strong>¿Por qué <code>RequestState</code> como unión de literales?</strong>
+      Porque TypeScript nos impedirá asignar cualquier otro string que no esté en la lista.
+      Si escribimos <code>'cargando'</code> en vez de <code>'loading'</code>, el compilador rompe
+      antes de que el código llegue al navegador.
+    </div>
+  </section>
+
+  <!-- ══════════ 03 · SERVICIO ══════════ -->
+  <section id="servicio">
+    <h2><span class="section-num">3</span> Servicio PokéAPI · <code>src/services/pokeApi.ts</code></h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "Este archivo es la única parte de la aplicación que sabe que existe una API externa.
+        Los componentes nunca hacen un <em>fetch</em> directamente; siempre le piden los datos
+        a este módulo. Exporta tres funciones asíncronas y cada una acepta un
+        <em>AbortSignal</em> opcional para poder cancelar la petición desde afuera."
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        src/services/pokeApi.ts
+      </div>
+      <pre>
+<span class="kw">const</span> <span class="var">BASE_URL</span> = <span class="str">'https://pokeapi.co/api/v2'</span>;
+
+<span class="cmt">// Función 1: Trae solo los nombres para el autocompletado (datalist)</span>
+<span class="kw">export const</span> <span class="fn">fetchAllPokemonNames</span> = <span class="kw">async</span> (
+  signal?: <span class="tp">AbortSignal</span>
+): <span class="tp">Promise</span>&lt;<span class="tp">string[]</span>&gt; =&gt; { <span class="cmt">/* ... */</span> };
+
+<span class="cmt">// Función 2: Trae una página de 20 Pokémon con todos sus detalles</span>
+<span class="cmt">// Usa Promise.all → lanza las 20 peticiones al mismo tiempo (concurrente)</span>
+<span class="kw">export const</span> <span class="fn">fetchPokemonList</span> = <span class="kw">async</span> (
+  limit: <span class="tp">number</span>, offset: <span class="tp">number</span>, signal?: <span class="tp">AbortSignal</span>
+): <span class="tp">Promise</span>&lt;<span class="tp">Pokemon[]</span>&gt; =&gt; {
+  <span class="kw">const</span> <span class="var">data</span> = <span class="kw">await</span> <span class="fn">fetch</span>(...).then(r =&gt; r.<span class="fn">json</span>());
+  <span class="kw">const</span> <span class="var">promises</span> = data.results.<span class="fn">map</span>(p =&gt; <span class="fn">fetchPokemonDetails</span>(p.name, signal));
+  <span class="kw">return</span> <span class="tp">Promise</span>.<span class="fn">all</span>(promises); <span class="cmt">// ← concurrente, no secuencial</span>
+};
+
+<span class="cmt">// Función 3: Trae los datos de UN Pokémon por nombre o ID</span>
+<span class="kw">export const</span> <span class="fn">fetchPokemonDetails</span> = <span class="kw">async</span> (
+  nameOrId: <span class="tp">string</span> | <span class="tp">number</span>, signal?: <span class="tp">AbortSignal</span>
+): <span class="tp">Promise</span>&lt;<span class="tp">Pokemon</span>&gt; =&gt; {
+  <span class="kw">if</span> (response.status === <span class="num">404</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">'Pokemon not found'</span>);
+  <span class="kw">return</span> response.<span class="fn">json</span>();
+};</pre>
+    </div>
+
+    <div class="callout tip">
+      <strong>Promise.all es clave:</strong> Si tuviéramos que esperar cada petición de los 20 Pokémon
+      de forma secuencial, tardaríamos ~4 segundos. Con <code>Promise.all</code> las lanzamos todas
+      al mismo tiempo y terminan en ~300ms.
+    </div>
+  </section>
+
+  <!-- ══════════ 04 · SEARCHFORM ══════════ -->
+  <section id="search">
+    <h2><span class="section-num">4</span> SearchForm · <code>src/components/SearchForm.tsx</code></h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "Este componente es el formulario de búsqueda. Tiene dos responsabilidades:
+        primero, ser un <em>formulario controlado</em>, es decir, React es quien guarda
+        el valor del input en su estado y no el DOM. Segundo, implementar un <em>debounce</em>
+        para que la búsqueda no dispare una petición por cada letra que escribimos,
+        sino que espere 400 milisegundos de silencio antes de actuar."
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        src/components/SearchForm.tsx — las dos piezas clave
+      </div>
+      <pre>
+<span class="cmt">// ── PIEZA 1: Formulario Controlado ──────────────────────────────</span>
+<span class="cmt">// El valor del input viene de React (value={searchTerm})</span>
+<span class="cmt">// React se entera de cada cambio via onChange</span>
+&lt;<span class="kw">input</span>
+  <span class="var">value</span>={<span class="var">searchTerm</span>}                        <span class="cmt">// ← React controla lo que se ve</span>
+  <span class="var">onChange</span>={e =&gt; <span class="fn">setSearchTerm</span>(e.target.value)} <span class="cmt">// ← React controla los cambios</span>
+  <span class="var">list</span>=<span class="str">"pokemon-suggestions"</span>                 <span class="cmt">// ← conectado al datalist</span>
+/&gt;
+
+<span class="cmt">// ── PIEZA 2: Debounce con useEffect ─────────────────────────────</span>
+<span class="cmt">// Se ejecuta cada vez que searchTerm cambia</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="kw">const</span> <span class="var">timer</span> = <span class="fn">setTimeout</span>(() =&gt; {
+    <span class="fn">onSearch</span>(searchTerm);     <span class="cmt">// ← dispara búsqueda al terminar</span>
+  }, <span class="num">400</span>);                    <span class="cmt">// ← 400ms de espera</span>
+
+  <span class="kw">return</span> () =&gt; <span class="fn">clearTimeout</span>(timer); <span class="cmt">// ← cancela si el usuario sigue escribiendo</span>
+}, [searchTerm]);              <span class="cmt">// ← se reinicia con cada letra</span></pre>
+    </div>
+
+    <div class="callout warn">
+      <strong>¿Qué pasaría sin debounce?</strong> Si escribimos "pikachu" (7 letras), se lanzarían
+      7 peticiones a la API: "p", "pi", "pik"... Con debounce solo se lanza <strong>1</strong>,
+      cuando el usuario termina de escribir.
+    </div>
+  </section>
+
+  <!-- ══════════ 05 · REQUEST STATUS ══════════ -->
+  <section id="status">
+    <h2><span class="section-num">5</span> RequestStatus · <code>src/components/RequestStatus.tsx</code></h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "Este componente es como un guardia de tráfico. Recibe el estado actual
+        (<em>loading, error, empty</em>) y decide qué mostrar. Si está cargando, muestra
+        20 tarjetas esqueleto animadas. Si hay error, muestra un mensaje comprensible.
+        Si no hay resultados, muestra el estado vacío. Si todo está bien, simplemente
+        deja pasar a sus hijos (la lista de Pokémon). Los componentes padres no tienen
+        que preocuparse por ninguno de esos casos."
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        src/components/RequestStatus.tsx — lógica de guardas
+      </div>
+      <pre>
+<span class="cmt">// Si está cargando → 20 tarjetas "skeleton" animadas</span>
+<span class="kw">if</span> (state === <span class="str">'loading'</span> &amp;&amp; !children) {
+  <span class="kw">return</span> (
+    &lt;<span class="kw">section</span> className=<span class="str">"dex"</span>&gt;
+      {<span class="tp">Array</span>.<span class="fn">from</span>({ length: loadingCount }).<span class="fn">map</span>((_, i) =&gt; (
+        &lt;<span class="kw">article</span> key={i} className=<span class="str">"pokemon-card pokemon-card--skeleton"</span>/&gt;
+      ))}
+    &lt;/<span class="kw">section</span>&gt;
+  );
+}
+
+<span class="cmt">// Si hubo error → mensaje descriptivo al usuario</span>
+<span class="kw">if</span> (state === <span class="str">'error'</span>) { <span class="kw">return</span> ( &lt;<span class="kw">p</span>&gt;{errorMessage}&lt;/<span class="kw">p</span>&gt; ); }
+
+<span class="cmt">// Si no encontró nada → estado vacío</span>
+<span class="kw">if</span> (state === <span class="str">'empty'</span>) { <span class="kw">return</span> ( &lt;<span class="kw">p</span>&gt;Sin resultados&lt;/<span class="kw">p</span>&gt; ); }
+
+<span class="cmt">// Si todo está bien → renderiza los hijos normalmente</span>
+<span class="kw">return</span> &lt;&gt;{children}&lt;/&gt;;</pre>
+    </div>
+  </section>
+
+  <!-- ══════════ 06 · LIST & CARD ══════════ -->
+  <section id="list-card">
+    <h2><span class="section-num">6</span> PokemonList & PokemonCard</h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "<span class="file-chip">PokemonList.tsx</span> es el componente más simple: recibe un array
+        de Pokémon y los itera con <em>.map()</em>. La clave aquí es que usamos el
+        <em>id numérico</em> del Pokémon como <code>key</code>, que es un identificador
+        estable y único. Esto permite a React hacer actualizaciones quirúrgicas del DOM,
+        moviendo solo las tarjetas que cambiaron, sin redibujar todo."
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        src/components/PokemonList.tsx
+      </div>
+      <pre>
+<span class="kw">export const</span> <span class="fn">PokemonList</span> = ({ pokemons }) =&gt; (
+  &lt;<span class="kw">section</span> className=<span class="str">"dex"</span> aria-label=<span class="str">"Lista de Pokémon"</span>&gt;
+    {pokemons.<span class="fn">map</span>(pokemon =&gt; (
+      &lt;<span class="fn">PokemonCard</span>
+        key={pokemon.id}   <span class="cmt">// ← id numérico estable, nunca duplicado</span>
+        pokemon={pokemon}
+      /&gt;
+    ))}
+  &lt;/<span class="kw">section</span>&gt;
+);</pre>
+    </div>
+
+    <div class="script-block">
+      <p>
+        "<span class="file-chip">PokemonCard.tsx</span> es el componente con más lógica visual.
+        Primero extrae el <em>tipo primario</em> del Pokémon y lo usa para inyectar
+        una variable CSS que cambia el color de toda la tarjeta.
+        Segundo, prioriza los <em>sprites animados</em> retro de la Generación V antes
+        que el arte oficial estático. Tercero, al hacer click reproduce el grito
+        del Pokémon (audio .ogg de la API) y luego la Web Speech API narra
+        su nombre y tipo en español."
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        src/components/PokemonCard.tsx — fragmentos clave
+      </div>
+      <pre>
+<span class="cmt">// ── 1. Color dinámico por tipo ─────────────────────────────────────</span>
+<span class="cmt">// Inyecta una variable CSS que usa los colores definidos en index.css</span>
+&lt;<span class="kw">article</span>
+  style={{ <span class="str">'--type-color'</span>: <span class="str">`var(--type-</span>${primaryType}<span class="str">)`</span> } <span class="kw">as</span> <span class="tp">React.CSSProperties</span>}
+&gt;
+
+<span class="cmt">// ── 2. Sprite animado con fallback ─────────────────────────────────</span>
+<span class="kw">const</span> <span class="var">animatedSprite</span> = pokemon.sprites
+  .versions?.['generation-v']?.['black-white']?.animated?.front_default;
+<span class="kw">const</span> <span class="var">imageUrl</span> = animatedSprite       <span class="cmt">// prioridad 1: retro animado</span>
+  || officialArtwork                   <span class="cmt">// prioridad 2: arte oficial HD</span>
+  || pokemon.sprites.front_default;    <span class="cmt">// prioridad 3: sprite básico</span>
+
+<span class="cmt">// ── 3. Secuencia de audio: grito → narración de voz ────────────────</span>
+<span class="kw">const</span> <span class="fn">handlePlayAudio</span> = () =&gt; {
+  <span class="kw">const</span> <span class="var">audio</span> = <span class="kw">new</span> <span class="fn">Audio</span>(cryUrl);
+  audio.<span class="fn">play</span>();
+  audio.onended = () =&gt; <span class="fn">speakDescription</span>(); <span class="cmt">// ← voz después del grito</span>
+};</pre>
+    </div>
+  </section>
+
+  <!-- ══════════ 07 · APP ══════════ -->
+  <section id="app">
+    <h2><span class="section-num">7</span> App.tsx — El Orquestador</h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "<code>App.tsx</code> es el cerebro. Es el único componente que habla con el servicio
+        de la API y el único que mantiene el estado global. Tiene cinco variables de estado
+        y el concepto más sofisticado del proyecto: el <em>AbortController</em>.
+        Cada vez que se lanza una nueva petición, se <em>cancela la anterior</em>
+        usando una referencia mutable con <code>useRef</code>. La clave está en el bloque
+        <code>catch</code> que detecta si el error es una cancelación esperada y simplemente
+        lo ignora, sin mostrar ningún error al usuario."
+      </p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        src/App.tsx — AbortController y manejo de estados
+      </div>
+      <pre>
+<span class="cmt">// Una referencia mutable que NO provoca re-renders cuando cambia</span>
+<span class="kw">const</span> <span class="var">abortControllerRef</span> = <span class="fn">useRef</span>&lt;<span class="tp">AbortController</span> | <span class="tp">null</span>&gt;(<span class="kw">null</span>);
+
+<span class="kw">const</span> <span class="fn">loadPokemons</span> = <span class="fn">useCallback</span>(<span class="kw">async</span> (offset) =&gt; {
+
+  <span class="cmt">// 1. Si hay una petición en vuelo → cancelarla</span>
+  <span class="kw">if</span> (abortControllerRef.current) {
+    abortControllerRef.current.<span class="fn">abort</span>();
+  }
+  <span class="cmt">// 2. Crear nueva señal para esta petición</span>
+  abortControllerRef.current = <span class="kw">new</span> <span class="fn">AbortController</span>();
+  <span class="kw">const</span> { signal } = abortControllerRef.current;
+
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="var">data</span> = <span class="kw">await</span> <span class="fn">fetchPokemonList</span>(LIMIT, offset, signal);
+    <span class="fn">setPokemons</span>(data);
+    <span class="fn">setRequestState</span>(<span class="str">'success'</span>);
+  } <span class="kw">catch</span> (error: <span class="kw">any</span>) {
+    <span class="cmt">// 3. Si fue cancelación → ignorar silenciosamente</span>
+    <span class="kw">if</span> (error.name === <span class="str">'AbortError'</span>) <span class="kw">return</span>;
+    <span class="cmt">// 4. Si fue error real → mostrar al usuario</span>
+    <span class="fn">setRequestState</span>(<span class="str">'error'</span>);
+  }
+}, []);</pre>
+    </div>
+
+    <div class="callout info">
+      <strong>¿Por qué useRef y no useState?</strong> Porque si usáramos <code>useState</code>
+      para guardar el AbortController, React re-renderizaría el componente cada vez que se
+      crea un nuevo controlador. Con <code>useRef</code> guardamos el valor sin disparar renders.
+    </div>
+  </section>
+
+  <!-- ══════════ 08 · FLUJO ══════════ -->
+  <section id="flujo">
+    <h2><span class="section-num">8</span> Flujo Completo de una Búsqueda</h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "Para cerrar la arquitectura, veamos el camino completo que recorre un dato
+        desde que el usuario escribe hasta que aparece la tarjeta en pantalla."
+      </p>
+    </div>
+
+    <div class="diagram">
+      <div>
+        <span class="box ui">Usuario escribe "pika"</span>
+        <span class="arrow">→</span>
+        <span class="box ui">SearchForm (onChange)</span>
+        <span class="arrow">→</span>
+        <span class="box">⏱ Debounce 400ms</span>
+      </div>
+      <div style="margin:8px 0">↓</div>
+      <div>
+        <span class="box">onSearch("pikachu")</span>
+        <span class="arrow">→</span>
+        <span class="box">App: AbortController.abort() petición anterior</span>
+      </div>
+      <div style="margin:8px 0">↓</div>
+      <div>
+        <span class="box">setRequestState('loading')</span>
+        <span class="arrow">→</span>
+        <span class="box ui">RequestStatus muestra Skeletons</span>
+      </div>
+      <div style="margin:8px 0">↓</div>
+      <div>
+        <span class="box srv">pokeApi.fetchPokemonDetails("pikachu")</span>
+        <span class="arrow">→</span>
+        <span class="box srv">fetch a pokeapi.co</span>
+      </div>
+      <div style="margin:8px 0">↓ (respuesta JSON)</div>
+      <div>
+        <span class="box">setPokemons([pikachu])</span>
+        <span class="arrow">→</span>
+        <span class="box">setRequestState('success')</span>
+      </div>
+      <div style="margin:8px 0">↓</div>
+      <div>
+        <span class="box ui">RequestStatus deja pasar → PokemonList → PokemonCard</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 09 · PRUEBAS ══════════ -->
+  <section id="pruebas">
+    <h2><span class="section-num">9</span> Pruebas Finales en Vivo</h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>
+        "Ahora vamos a demostrar cada característica técnica directamente en el navegador.
+        Abrir el proyecto con <em>npm run dev</em> y seguir este guión paso a paso."
+      </p>
+    </div>
+
+    <div class="callout demo">
+      <strong>🖥️ Arrancar el servidor:</strong>
+      Abrir una terminal en <code>D:\pokedex-react</code> y ejecutar <code>npm run dev</code>.
+      Navegar a <strong>http://localhost:5173</strong>.
+    </div>
+
+    <!-- Prueba 1 -->
+    <div class="test-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Estado Inicial y Carga (loading → success)</strong>
+        <p>Al abrir la página por primera vez, observar que aparecen tarjetas en gris pulsante antes de que carguen los datos reales.</p>
+        <p class="expected">✅ Esperado: Se ven 20 esqueletos grises animados durante ~1-2 segundos y luego aparecen las tarjetas reales con colores e imágenes.</p>
+      </div>
+    </div>
+
+    <!-- Prueba 2 -->
+    <div class="test-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Autocompletado del Buscador</strong>
+        <p>Hacer click en el campo de búsqueda y escribir <code>pika</code> lentamente. Observar las sugerencias que aparecen debajo.</p>
+        <p class="expected">✅ Esperado: El navegador muestra un desplegable nativo con "pikachu", "pikachu-gmax", etc.</p>
+      </div>
+    </div>
+
+    <!-- Prueba 3 -->
+    <div class="test-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Debounce + Cancelación con AbortController</strong>
+        <p>Abrir las DevTools (F12) → pestaña "Network". Escribir rápidamente "charizard" letra por letra. Observar las peticiones.</p>
+        <p class="expected">✅ Esperado: La mayoría de peticiones muestran estado "cancelled" (en gris/rojo tachado). Solo <strong>una</strong> petición llega a completarse (la del término final).</p>
+      </div>
+    </div>
+
+    <!-- Prueba 4 -->
+    <div class="test-step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Estado "Sin Resultados" (empty)</strong>
+        <p>En el buscador, escribir un nombre que no existe, como <code>supersaiyan</code>, y esperar.</p>
+        <p class="expected">✅ Esperado: La API devuelve 404 y la UI muestra la tarjeta "Sin resultados" en vez de un error técnico.</p>
+      </div>
+    </div>
+
+    <!-- Prueba 5 -->
+    <div class="test-step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <strong>Colores Dinámicos por Tipo</strong>
+        <p>Buscar "charmander" y observar el color de su tarjeta. Luego buscar "squirtle".</p>
+        <p class="expected">✅ Esperado: Charmander tiene fondo naranja/rojo (fuego) y Squirtle fondo azul (agua). El color cambia solo gracias a la variable CSS <code>--type-color</code>.</p>
+      </div>
+    </div>
+
+    <!-- Prueba 6 -->
+    <div class="test-step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <strong>Sprite Animado</strong>
+        <p>Buscar "bulbasaur" y observar su imagen. Comparar visualmente con la lista general.</p>
+        <p class="expected">✅ Esperado: La imagen del Pokémon se mueve (sprite retro animado de 16-bit de la Generación V). Si no tiene sprite animado, muestra el arte oficial HD.</p>
+      </div>
+    </div>
+
+    <!-- Prueba 7 -->
+    <div class="test-step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <strong>Audio + Text-to-Speech</strong>
+        <p>Buscar "pikachu" y hacer <strong>click sobre la imagen</strong> de la tarjeta.</p>
+        <p class="expected">✅ Esperado: Primero se escucha el grito icónico de Pikachu. Inmediatamente después, una voz en español dice "pikachu. Pokémon de tipo eléctrico."</p>
+      </div>
+    </div>
+
+    <!-- Prueba 8 -->
+    <div class="test-step">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <strong>Sin Duplicados (Cargar Más)</strong>
+        <p>En la lista principal, hacer click en "Cargar más" varias veces rápidamente. Luego inspeccionar el DOM.</p>
+        <p class="expected">✅ Esperado: No aparecen tarjetas repetidas. El filtro <code>.filter(d => !prev.some(p => p.id === d.id))</code> en App.tsx lo garantiza.</p>
+      </div>
+    </div>
+
+    <!-- Prueba 9 -->
+    <div class="test-step">
+      <div class="step-num">9</div>
+      <div class="step-body">
+        <strong>Navegación por Teclado (Accesibilidad)</strong>
+        <p>Hacer click en el campo de búsqueda y navegar usando solo el teclado: Tab, flechas, Enter.</p>
+        <p class="expected">✅ Esperado: Se puede tabular hasta el botón "Cargar más" y activarlo con Enter. El foco es visible en todo momento gracias al HTML semántico.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 10 · RÚBRICA ══════════ -->
+  <section id="requisitos">
+    <h2><span class="section-num">10</span> Verificación de la Rúbrica</h2>
+    <div class="divider"></div>
+
+    <div class="script-block">
+      <p>"Para cerrar, veamos cómo cada requerimiento del enunciado está cubierto y en qué archivo vive exactamente."</p>
+    </div>
+
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Requerimiento</th>
+          <th>Estado</th>
+          <th>Archivo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Proyecto con React + TypeScript + Vite</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">vite.config.ts</span></td>
+        </tr>
+        <tr>
+          <td>Al menos 4 componentes con responsabilidades claras</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">SearchForm, RequestStatus, PokemonList, PokemonCard</span></td>
+        </tr>
+        <tr>
+          <td>Tipos para props, datos y estados de solicitud</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">src/types/pokemon.ts</span></td>
+        </tr>
+        <tr>
+          <td>Separar acceso a PokéAPI de la presentación</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">src/services/pokeApi.ts</span></td>
+        </tr>
+        <tr>
+          <td>Conservar colección de Pokémon en estado</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">App.tsx · useState&lt;Pokemon[]&gt;</span></td>
+        </tr>
+        <tr>
+          <td>Renderizar con .map() y claves estables</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">PokemonList.tsx · key={pokemon.id}</span></td>
+        </tr>
+        <tr>
+          <td>No usar getElementById, innerHTML ni DOM manual</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td>Todo el proyecto usa JSX declarativo</td>
+        </tr>
+        <tr>
+          <td>Evitar Pokémon duplicados por identificador</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">App.tsx · .filter(d => !prev.some(...))</span></td>
+        </tr>
+        <tr>
+          <td>Formulario controlado con evento submit</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">SearchForm.tsx · value + onChange + onSubmit</span></td>
+        </tr>
+        <tr>
+          <td>Debounce para evitar petición por tecla</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">SearchForm.tsx · setTimeout 400ms</span></td>
+        </tr>
+        <tr>
+          <td>Cancelar solicitud anterior con AbortController</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">App.tsx · abortControllerRef + .abort()</span></td>
+        </tr>
+        <tr>
+          <td>No mostrar cancelaciones como errores de red</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">App.tsx · if (error.name === 'AbortError') return</span></td>
+        </tr>
+        <tr>
+          <td>Estados: inicial, carga, éxito, vacío, error</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td><span class="badge-file">RequestStatus.tsx · RequestState type</span></td>
+        </tr>
+        <tr>
+          <td>Mensajes comprensibles y navegación por teclado</td>
+          <td><span class="badge-ok">✅ OK</span></td>
+          <td>HTML semántico: form, label, input, section, article</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout tip" style="margin-top:24px">
+      <strong>Resultado: 14 / 14 requerimientos cubiertos al 100%.</strong>
+      El proyecto va más allá de los requerimientos base con: sprites animados, colores dinámicos por tipo, efecto 3D hover y narración Text-to-Speech.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Pokédex Declarativa · Mayro Gameros · [S9] React + TypeScript · 2026</p>
+</footer>
+
+<script>
+  // Marcar enlace activo en la navegación al hacer scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -705,16 +705,49 @@ src/
 <span class="cmt">// ── 2. Sprite animado con fallback ─────────────────────────────────</span>
 <span class="kw">const</span> <span class="var">animatedSprite</span> = pokemon.sprites
   .versions?.['generation-v']?.['black-white']?.animated?.front_default;
-<span class="kw">const</span> <span class="var">imageUrl</span> = animatedSprite       <span class="cmt">// prioridad 1: retro animado</span>
+<span class="kw">const</span> <span class="var">imageUrl</span> = animatedSprite       <span class="cmt">// prioridad 1: retro animado (Gen V)</span>
   || officialArtwork                   <span class="cmt">// prioridad 2: arte oficial HD</span>
   || pokemon.sprites.front_default;    <span class="cmt">// prioridad 3: sprite básico</span>
 
-<span class="cmt">// ── 3. Secuencia de audio: grito → narración de voz ────────────────</span>
+<span class="cmt">// ── 3. Diccionario de tipos en español ─────────────────────────────</span>
+<span class="kw">const</span> <span class="var">typeTranslations</span>: <span class="tp">Record</span>&lt;<span class="tp">string</span>, <span class="tp">string</span>&gt; = {
+  fire: <span class="str">'fuego'</span>, water: <span class="str">'agua'</span>, grass: <span class="str">'planta'</span>,
+  electric: <span class="str">'eléctrico'</span>, psychic: <span class="str">'psíquico'</span>, dragon: <span class="str">'dragón'</span>, <span class="cmt">/* ... */</span>
+};
+
+<span class="cmt">// ── 4. Web Speech API: narración en español ────────────────────────</span>
+<span class="kw">const</span> <span class="fn">speakDescription</span> = () =&gt; {
+  <span class="kw">if</span> (!(<span class="str">'speechSynthesis'</span> <span class="kw">in</span> window)) <span class="kw">return</span>; <span class="cmt">// API no disponible</span>
+  window.speechSynthesis.<span class="fn">cancel</span>();             <span class="cmt">// cancelar voz previa</span>
+
+  <span class="kw">const</span> <span class="var">types</span> = pokemon.types.<span class="fn">map</span>(t =&gt; typeTranslations[t.type.name]).<span class="fn">join</span>(<span class="str">' y '</span>);
+  <span class="kw">const</span> <span class="var">text</span> = <span class="str">`</span>${pokemon.name}<span class="str">. Pokémon de tipo </span>${types}<span class="str">.`</span>;
+
+  <span class="kw">const</span> <span class="var">utterance</span> = <span class="kw">new</span> <span class="fn">SpeechSynthesisUtterance</span>(text);
+  utterance.lang = <span class="str">'es-ES'</span>;  <span class="cmt">// voz en español</span>
+  utterance.rate = <span class="num">1.0</span>;
+  utterance.onend = () =&gt; <span class="fn">setIsPlaying</span>(<span class="kw">false</span>);
+  window.speechSynthesis.<span class="fn">speak</span>(utterance);
+};
+
+<span class="cmt">// ── 5. Secuencia completa: grito → espera → narración ──────────────</span>
 <span class="kw">const</span> <span class="fn">handlePlayAudio</span> = () =&gt; {
+  <span class="kw">if</span> (isPlaying) <span class="kw">return</span>;
+  <span class="fn">setIsPlaying</span>(<span class="kw">true</span>);
   <span class="kw">const</span> <span class="var">audio</span> = <span class="kw">new</span> <span class="fn">Audio</span>(cryUrl);
   audio.<span class="fn">play</span>();
-  audio.onended = () =&gt; <span class="fn">speakDescription</span>(); <span class="cmt">// ← voz después del grito</span>
+  audio.onended = () =&gt; <span class="fn">speakDescription</span>(); <span class="cmt">// ← voz justo al terminar el grito</span>
 };</pre>
+    </div>
+
+    <div class="callout info">
+      <strong>🔊 Web Speech API — sin instalar nada:</strong>
+      <code>window.speechSynthesis</code> es una API nativa de todos los navegadores modernos (Chrome, Edge, Firefox).
+      No requiere librerías externas, no requiere internet, no requiere API Keys.
+      El diccionario <code>typeTranslations</code> convierte los tipos de inglés (como <code>fire</code>) al español
+      (<code>fuego</code>) para que la narración tenga sentido. Al hacer click en cualquier Pokémon escucharás
+      primero su grito clásico de los videojuegos y luego la voz dirá, por ejemplo:
+      <em>"Pikachu. Pokémon de tipo eléctrico."</em>
     </div>
   </section>
 
